@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { AlertCircle } from 'lucide-react'
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from "../hooks/use-toast"
 import axios from 'axios';
 
 export function ContactForm() {
@@ -18,12 +18,13 @@ export function ContactForm() {
     console.log(data)
     try{
       setIsSubmitting(true);
-      const response = await axios.post("https://localhost:6969/mail", data);
-      if (response.status === 200 && response.data === "OK") {
+      const response = await axios.post("http://localhost:6969/mail", data);
+
+      if (response.status === 200 && response.statusText === "OK") {
         console.log(response)
         toast({
           title: "Message Sent",
-          description: "Your message has been sent successfully.",
+          description: "Your message has been sent successfully Please check your email !!.",
         })
         setIsSubmitting(false)
         reset()
@@ -33,7 +34,7 @@ export function ContactForm() {
       console.error("Error sending message:", error)
       toast({
         title: "Error",
-        description: "Failed to send message. Please try again.",
+        description: "Failed to send message. Please check your email address and try again!.",
         variant: "destructive"
       })
       setIsSubmitting(false)
