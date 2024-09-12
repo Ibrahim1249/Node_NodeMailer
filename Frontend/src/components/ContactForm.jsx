@@ -1,4 +1,4 @@
-'use client';
+
 import { useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { Button } from "@/components/ui/button"
@@ -6,18 +6,39 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { AlertCircle } from 'lucide-react'
+import { useToast } from '@/hooks/use-toast';
+import axios from 'axios';
 
 export function ContactForm() {
   const { register, handleSubmit, formState: { errors }, reset } = useForm()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { toast } = useToast()
 
   const onSubmit = async (data) => {
-    setIsSubmitting(true)
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    console.log('Form submitted:', data)
-    setIsSubmitting(false)
-    reset()
+    console.log(data)
+    try{
+      setIsSubmitting(true);
+      const response = await axios.post("https://localhost:6969/mail", data);
+      if (response.status === 200 && response.data === "OK") {
+        console.log(response)
+        toast({
+          title: "Message Sent",
+          description: "Your message has been sent successfully.",
+        })
+        setIsSubmitting(false)
+        reset()
+      }
+
+    }catch(error){
+      console.error("Error sending message:", error)
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive"
+      })
+      setIsSubmitting(false)
+    }
+
   }
 
   return (
@@ -25,7 +46,7 @@ export function ContactForm() {
       className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
       <div
         className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg animate-fade-in-down">
-        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Contact Us</h2>
+        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Node Mailer</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="animate-fade-in-up">
             <Label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Name</Label>
