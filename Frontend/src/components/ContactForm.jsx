@@ -18,7 +18,7 @@ export function ContactForm() {
     console.log(data)
     try{
       setIsSubmitting(true);
-      const response = await axios.post("http://localhost:6969/mail", data);
+      const response = await axios.post("https://node-nodemailer-ri2w.onrender.com/mail", data);
 
       if (response.status === 200 && response.statusText === "OK") {
         console.log(response)
