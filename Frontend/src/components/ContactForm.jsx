@@ -15,13 +15,10 @@ export function ContactForm() {
   const { toast } = useToast()
 
   const onSubmit = async (data) => {
-    console.log(data)
     try{
       setIsSubmitting(true);
       const response = await axios.post("https://node-nodemailer-ri2w.onrender.com/mail", data);
-
-      if (response.status === 200 && response.statusText === "OK") {
-        console.log(response)
+      if (response.status === 200) {
         toast({
           title: "Message Sent",
           description: "Your message has been sent successfully Please check your email !!.",
@@ -29,9 +26,7 @@ export function ContactForm() {
         setIsSubmitting(false)
         reset()
       }
-
     }catch(error){
-      console.error("Error sending message:", error)
       toast({
         title: "Error",
         description: "Failed to send message. Please check your email address and try again!.",
